@@ -3,7 +3,7 @@
 Plugin Name: Content Audit
 Plugin URI: http://stephanieleary.com/code/wordpress/content-audit/
 Description: Lets you create a content inventory and notify the responsible parties about their outdated content. 
-Version: 1.8.2
+Version: 1.9a
 Author: Stephanie Leary
 Author URI: http://stephanieleary.com
 

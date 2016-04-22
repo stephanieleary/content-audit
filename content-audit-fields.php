@@ -27,12 +27,6 @@ function create_content_audit_tax() {
 			'helps' => __('Enter content attributes separated by commas.', 'content-audit'),
 		 )
 	 );
-	
-	wp_insert_term( 
-		__( 'Outdated', 'content-audit' ), 
-		'content_audit', 
-		array( 'description' => __( 'This information is old and should be updated.', 'content-audit' ) ) 
-	); // this one stays; the others can be edited
 }
 
 function content_audit_term_count( $terms, $taxonomy ) {
@@ -109,39 +103,48 @@ function content_audit_term_count( $terms, $taxonomy ) {
 }
 
 function activate_content_audit_terms() {
-	wp_insert_term( 
-		__( 'Redundant', 'content-audit' ), 
-		'content_audit', 
-		array( 'description' => __( 'This information is duplicated elsewhere.', 'content-audit' ) ) 
-	 );
-	wp_insert_term( 
-		__( 'Trivial', 'content-audit' ), 
-		'content_audit', 
-		array( 'description' => __( 'This page is unnecessary.', 'content-audit' ) ) 
-	 );
-	wp_insert_term( 
-		__( 'Review SEO', 'content-audit' ), 
-		'content_audit', 
-		array( 'description' => __( 'The title, metadata, and/or content are not aligned with our target keywords.', 'content-audit' ) ) 
-	 );
-	wp_insert_term( 
-		__( 'Review Style', 'content-audit' ), 
-		'content_audit', 
-		array( 'description' => __( 'The title and/or content were not written according to our editorial guidelines.', 'content-audit' ) ) 
-	 );
-	wp_insert_term( 
-		__( 'Audited', 'content-audit' ), 
-		'content_audit', 
-		array( 'description' => __( 'This page has been reviewed. No further changes are needed.', 'content-audit' ) ) 
-	 );
+	if ( !term_exists( 'Outdated', 'content-audit' ) &&  !term_exists( 'outdated', 'content-audit' ) )
+		wp_insert_term( 
+			__( 'Outdated', 'content-audit' ), 
+			'content_audit', 
+			array( 'description' => __( 'This information is old and should be updated.', 'content-audit' ) ) 
+		);
+	if ( !term_exists( 'Redundant', 'content-audit' ) &&  !term_exists( 'redundant', 'content-audit' ) )	
+		wp_insert_term( 
+			__( 'Redundant', 'content-audit' ), 
+			'content_audit', 
+			array( 'description' => __( 'This information is duplicated elsewhere.', 'content-audit' ) ) 
+		 );
+	if ( !term_exists( 'Trivial', 'content-audit' ) &&  !term_exists( 'trivial', 'content-audit' ) )
+		wp_insert_term( 
+			__( 'Trivial', 'content-audit' ), 
+			'content_audit', 
+			array( 'description' => __( 'This page is unnecessary.', 'content-audit' ) ) 
+		 );
+	if ( !term_exists( 'Review SEO', 'content-audit' ) &&  !term_exists( 'review-seo', 'content-audit' ) )
+		wp_insert_term( 
+			__( 'Review SEO', 'content-audit' ), 
+			'content_audit', 
+			array( 'description' => __( 'The title, metadata, and/or content are not aligned with our target keywords.', 'content-audit' ) ) 
+		 );
+	if ( !term_exists( 'Review Style', 'content-audit' ) &&  !term_exists( 'review-style', 'content-audit' ) )
+		wp_insert_term( 
+			__( 'Review Style', 'content-audit' ), 
+			'content_audit', 
+			array( 'description' => __( 'The title and/or content were not written according to our editorial guidelines.', 'content-audit' ) ) 
+		 );
+	if ( !term_exists( 'Audited', 'content-audit' ) &&  !term_exists( 'audited', 'content-audit' ) )
+		wp_insert_term( 
+			__( 'Audited', 'content-audit' ), 
+			'content_audit', 
+			array( 'description' => __( 'This page has been reviewed. No further changes are needed.', 'content-audit' ) ) 
+		 );
 }
 
 add_action( 'admin_init', 'content_audit_taxonomies' );
 
 function content_audit_taxonomies() {
-	global $post, $current_user;
-	get_currentuserinfo();
-	$role = $current_user->roles[0];
+	$role = wp_get_current_user()->roles[0];
 	$options = get_option( 'content_audit' );
 	if ( !is_array( $options['post_types'] ) )
 		$options['post_types'] = array( $options['post_types'] );
@@ -160,9 +163,7 @@ function content_audit_taxonomies() {
 
 add_action( 'admin_init', 'content_audit_boxes' );
 function content_audit_boxes() {
-	global $post, $current_user;
-	get_currentuserinfo();
-	$role = $current_user->roles[0];
+	$role = wp_get_current_user()->roles[0];
 	$options = get_option( 'content_audit' );
 	if ( !is_array( $options['post_types'] ) )
 		$options['post_types'] = array( $options['post_types'] );
@@ -202,14 +203,12 @@ function remove_audit_taxonomy_boxes()
 }
 
 function content_audit_notes_meta_box() {
-	global $post, $current_user;
-	get_currentuserinfo();
-	$role = $current_user->roles[0];
+	$role = wp_get_current_user()->roles[0];
 	$options = get_option( 'content_audit' );
 	$allowed = $options['rolenames'];
 	if ( !is_array( $allowed ) )
 		$allowed = array( $allowed );
-	$notes = get_post_meta( $post->ID, '_content_audit_notes', true );
+	$notes = get_post_meta( get_the_ID(), '_content_audit_notes', true );
 	if ( function_exists( 'wp_nonce_field' ) ) wp_nonce_field( 'content_audit_notes_nonce', '_content_audit_notes_nonce' ); 
 ?>
 <div id="audit-notes">
@@ -224,9 +223,7 @@ function content_audit_notes_meta_box() {
 }
 
 function content_audit_owner_meta_box() {
-	global $post, $current_user;
-	get_currentuserinfo();
-	$role = $current_user->roles[0];
+	$role = wp_get_current_user()->roles[0];
 	$options = get_option( 'content_audit' );
 	$allowed = $options['rolenames'];
 	if ( !is_array( $allowed ) )
@@ -235,7 +232,7 @@ function content_audit_owner_meta_box() {
 ?>
 <div id="audit-owner">
 	<?php
-	$owner = get_post_meta( $post->ID, '_content_audit_owner', true );
+	$owner = get_post_meta( get_the_ID(), '_content_audit_owner', true );
 	if ( empty( $owner ) ) $owner = -1;
 	if ( in_array( $role, $allowed ) ) {
 		wp_dropdown_users( array( 
@@ -254,9 +251,7 @@ function content_audit_owner_meta_box() {
 }
 
 function content_audit_exp_date_meta_box() {
-	global $post, $current_user;
-	get_currentuserinfo();
-	$role = $current_user->roles[0];
+	$role = wp_get_current_user()->roles[0];
 	$options = get_option( 'content_audit' );
 	$allowed = $options['rolenames'];
 	if ( !is_array( $allowed ) )
@@ -265,7 +260,7 @@ function content_audit_exp_date_meta_box() {
 ?>
 <div id="audit-exp-date">
 	<?php 
-	$date = get_post_meta( $post->ID, '_content_audit_expiration_date', true ); 
+	$date = get_post_meta( get_the_ID(), '_content_audit_expiration_date', true ); 
 	// convert from timestamp to date string
 	if ( !empty( $date ) )
 		$date = date( 'm/d/y', $date );
@@ -316,9 +311,7 @@ function save_content_audit_meta_data( $post_id ) {
 	}
 	
 	// check capabilites
-	global $current_user;
-	get_currentuserinfo();
-	$role = $current_user->roles[0];
+	$role = wp_get_current_user()->roles[0];
 	$allowed = $options['rolenames'];
 	if ( !is_array( $allowed ) )
 		$allowed = array( $allowed );
@@ -389,24 +382,24 @@ function content_audit_media_fields( $form_fields, $post ) {
 	$owner_dropdown = wp_dropdown_users( array( 
 		'selected' => $owner, 
 		'name' => "attachments[$post->ID][_content_audit_owner]", 
-		'show_option_none' => __( 'Select a user','content-audit' ),
+		'show_option_none' => __( 'Select a user', 'content-audit' ),
 		'echo' => 0,
 	 ) );
 	
 	$form_fields['audit_owner'] = array( 
-			'label' => __( 'Content Audit Owner' ),
+			'label' => __( 'Content Audit Owner', 'content-audit' ),
 			'input' => 'select',
 			'select' => $owner_dropdown,
 		 );
 		
 	$form_fields['audit_notes'] = array( 
-			'label' => __( 'Content Audit Notes' ),
+			'label' => __( 'Content Audit Notes', 'content-audit' ),
 			'input' => 'textarea',
 			'value' => $notes,
 		 );
 	
 	$form_fields['audit_expiration'] = array( 
-			'label' => __( 'Expiration Date' ),
+			'label' => __( 'Expiration Date', 'content-audit' ),
 			'input' => 'text',
 			'value' => $date,
 			'class' => 'datepicker',
@@ -432,7 +425,7 @@ function content_audit_admin_bar_links() {
 	$wp_admin_bar->add_menu( array( 
 		'parent' => false, 
 		'id' => 'content_audit',
-		'title' => __( 'Audit' ), 
+		'title' => __( 'Audit', 'content-audit' ), 
 		'href' => get_edit_post_link( $post->ID ), 
 		'meta' => false 
 	 ) );
@@ -463,7 +456,7 @@ function content_audit_admin_bar_links() {
 				array( 
 					'parent' => 'content_audit',
 					'id' => 'delete',
-					'title' => __( 'Move to Trash' ),
+					'title' => __( 'Move to Trash', 'content-audit' ),
 					'href' => add_query_arg( array( 'return' => admin_url( 'edit.php' ) ), get_delete_post_link( $current_object->term_id ) )
 				 )
 			 );
@@ -474,7 +467,7 @@ function content_audit_admin_bar_links() {
 			array( 
 				'parent' => 'content_audit',
 				'id' => 'download',
-				'title' => __( 'Download Audit Report' ),
+				'title' => __( 'Download Audit Report', 'content-audit' ),
 				'href' => add_query_arg( array ( 'format' => 'csv', 'post_type' => $current_object->post_type ), get_permalink( $current_object->ID ) )
 			 )
 		 );
@@ -528,9 +521,7 @@ function content_audit_quickedit( $column_name, $post_type ) {
 	    return;
 
 	// if the user can't audit, quit
-	global $post, $current_user;
-	get_currentuserinfo();
-	$role = $current_user->roles[0];
+	$role = wp_get_current_user()->roles[0];
 	$options = get_option( 'content_audit' );
 	$allowed = $options['rolenames'];
 	if ( !is_array( $allowed ) )
@@ -538,10 +529,13 @@ function content_audit_quickedit( $column_name, $post_type ) {
 	if ( !in_array( $role, $allowed ) )
 		return;
 	
-	// we're good to go		
+	// we're good to go	
+	
+	$post_id = get_the_ID();
+		
 	switch( $column_name ) {
 	            case 'content_owner':
-					$owner = get_post_meta( $post->ID, '_content_audit_owner', true );
+					$owner = get_post_meta( $post_id, '_content_audit_owner', true );
 					if ( empty( $owner ) ) 
 						$owner = -1;
 	               ?>
@@ -563,7 +557,7 @@ function content_audit_quickedit( $column_name, $post_type ) {
 					<?php
 	            break;
 				case 'content_notes':
-					$notes = get_post_meta( $post->ID, '_content_audit_notes', true );
+					$notes = get_post_meta( $post_id, '_content_audit_notes', true );
 					?>
 					<fieldset class="inline-edit-col-right">
 						<div class="inline-edit-col">
@@ -577,7 +571,7 @@ function content_audit_quickedit( $column_name, $post_type ) {
 					<?php
 				break;
 				case 'expiration': 
-					$date = get_post_meta( $post->ID, '_content_audit_expiration_date', true ); 
+					$date = get_post_meta( $post_id, '_content_audit_expiration_date', true ); 
 					// convert from timestamp to date string
 					if ( !empty( $date ) )
 						$date = date( 'm/d/y', $date );

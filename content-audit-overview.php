@@ -28,7 +28,7 @@ function content_audit_overview() { ?>
 	?>
 
     <h2><?php _e( 'Content Audit Overview', 'content-audit' ); ?></h2>
-	<p><a class="button secondary" href="<?php echo add_query_arg( array( 'format' => 'csv' ), home_url() ); ?>">Download as CSV</a></p>
+	<p><a class="button secondary" href="<?php echo add_query_arg( array( 'format' => 'csv' ), home_url() ); ?>"><?php __('Download as CSV', 'content-audit'); ?></a></p>
 	<?php
 	// for each term in the audit taxonomy, print a box with a big number for the count
 	$terms = get_terms( 'content_audit', array( 'hide_empty' => 0 ) );
@@ -50,7 +50,7 @@ function content_audit_overview() { ?>
 				// with a column for each content type containing the count for each of their assigned items
 				$tables[$term->slug] = '<h3 id="'.$term->slug.'">'. $term->name .'</h3>';
 				$tables[$term->slug] .= '<table class="wp-list-table widefat fixed boss-view" cellspacing="0">';
-				$tables[$term->slug] .= "<thead> \n <tr> \n <th>". __( "Content Owner" ). '</th>';
+				$tables[$term->slug] .= "<thead> \n <tr> \n <th>". __( "Content Owner", 'content-audit' ). '</th>';
 				foreach ( $types as $label ) { 
 					$tables[$term->slug] .= '<th>'. $label .'</th>';
 				}
@@ -134,14 +134,25 @@ function content_audit_download_template_include( $template ) {
 	if ( !isset( $_REQUEST['format'] ) || 'csv' !== $_REQUEST['format'] )
 		return $template;
 	
-	global $post, $wpdb;
+	global $wpdb;
 
-	$tableheaders = array( 'ID', 'Title', 'Author', 'Content Owner', 'Status', 'Notes', 'Type', 'Created', 'Updated', 'Expires' );
+	$tableheaders = array( 
+		__( 'ID', 'content-audit' ), 
+		__( 'Title', 'content-audit' ), 
+		__( 'Author', 'content-audit' ), 
+		__( 'Content Owner', 'content-audit' ), 
+		__( 'Status', 'content-audit' ), 
+		__( 'Notes', 'content-audit' ), 
+		__( 'Type', 'content-audit' ), 
+		__( 'Created', 'content-audit' ), 
+		__( 'Updated', 'content-audit' ), 
+		__( 'Expires', 'content-audit' ) 
+	);
 	$date_format = get_option( 'date_format' );
 	$options = get_option( 'content_audit' ); 
 	$types = $options['post_types'];
 	
-	$fileName = 'content-audit-'.date( 'Ymdu' ).'.csv';
+	$fileName = apply_filters( 'content_audit_csv_filename', 'content-audit-'.date( 'Ymdu' ).'.csv' );
 
 	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 	header('Content-Description: File Transfer');
@@ -153,7 +164,7 @@ function content_audit_download_template_include( $template ) {
 	$file = @fopen( 'php://output', 'w' );
 	
 	
-	fputcsv( $file, $tableheaders );
+	fputcsv( $file, apply_filters( 'content_audit_csv_header_data', $tableheaders ) );
 	
 	$results = get_posts( array( 
 		'posts_per_page' => -1,
@@ -181,7 +192,7 @@ function content_audit_download_template_include( $template ) {
 		}
 		$expiration = get_post_meta( $post->ID, '_content_audit_expiration_date', true );
 	
-		fputcsv( $file, array( 
+		$row = array( 
 			$post->ID ,
 			$post->post_title,
 			$author->display_name,
@@ -192,7 +203,8 @@ function content_audit_download_template_include( $template ) {
 			get_the_date( $date_format ) ,
 			the_modified_date( $date_format, '', '', false ) ,
 			$expiration,
-		) );
+		);
+		fputcsv( $file, apply_filters( 'content_audit_csv_row_data', $row ) );
 	}
 	fclose( $file );
 	exit; 

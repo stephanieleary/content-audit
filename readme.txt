@@ -20,13 +20,29 @@ The plugin creates three new filters on the Edit screens: author, content owner,
 
 You can display the audit details to logged-in editors on the front end if you want, either above or below the content. You can style the audit message with custom CSS.
 
-If you want to see sparklines from Google Analytics, also install the <a href="http://www.ioncannon.net/projects/google-analytics-dashboard-wordpress-widget/">Google Analytics Dashboard plugin</a>. This will give you some idea of how popular an article is, which might influence your decisions.
-
 <strong>New:</strong> you can now clear data from past audits and start over!
 
 = Translations =
 
 If you would like to send me a translation, please write to me through <a href="http://sillybean.net/about/contact/">my contact page</a>. Let me know which plugin you've translated and how you would like to be credited. I will write you back so you can attach the files in your reply.
+
+== Notes ==
+
+= Filter reference =
+
+'content_audit_notes' filters the public display of the notes field
+
+'content_audit_dashboard_get_posts_args' filters the get_posts() arguments for the Dashboard widget
+
+'content_audit_dashboard_output' filters the table output of the Dashboard widget
+
+'content_audit_dashboard_congrats' filters the congratulations message of the Dashboard widget
+
+'content_audit_csv_filename' filters the file name of the CSV download
+
+'content_audit_csv_header_data' filters the header label array in the CSV download
+
+'content_audit_csv_row_data' filters the contents of each row (as an array) in the CSV download
 
 == Installation ==
 
@@ -43,13 +59,14 @@ If you would like to send me a translation, please write to me through <a href="
 1. Quick Edit with the Content Audit fields
 1. Categorizing a page from the front end using the admin bar
 
-== Upgrade Notice ==
-
-= 1.7 =
-New: an option to clear data from previous audits and start over.
-
 == Changelog ==
 
+= 1.9 =
+* Filter ALL THE THINGS! See the Notes tab for filter reference.
+* Remove unnecessary globals.
+* Fix strings that couldn't be translated.
+* General cleanup.
+* Remove recommendation and column support for defunct Google Analytics Dashboard plugin.
 = 1.8.2 =
 * Fix bug where CSV export term column was cumulative instead of per-post.
 = 1.8.1 =
