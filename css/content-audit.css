@@ -1,0 +1,40 @@
+#content_audit_types li, #content_audit_roles li { list-style: none; padding-right: 2em; }
+#content_audit_meta label { padding-right: 2em; }
+#audit-notes { width: 100%; }
+#audit-notes textarea { width: 99%; margin: 0 1em 1em 0; }
+#content_audit_form textarea { display: block; width: 30em; height: 10em; }
+#boss-squares { margin: 2em 0; overflow: auto; }
+#boss-squares li { float: left; height: 8em; padding: .5em 0; text-align: center; background: #f9f9f9; border: 1px solid #dfdfdf; border-radius: 3px; }
+#boss-squares li a { display: block; text-decoration: none; }
+#boss-squares li h3 { font-size: 2em; margin-top: 0; padding-top: 1em; }
+#boss-squares li p { margin-bottom: 0; padding-bottom: 1em; }
+#posts-filter th#ID { width: 4em; }
+#posts-filter th#expiration { width: 6em; }
+table.boss-view { margin-bottom: 2em; }
+table#content-audit-outdated { border: 0; }
+table#content-audit-outdated td.column-title { padding: 8px .5em; }
+table#content-audit-outdated td.column-date { padding: 8px .5em 8px 0; width: 30%; }
+table#content-audit-outdated th.column-date { text-align: left; width: 30%; padding: 0; }
+label.indent { margin-left: 2em; }
+th[id^="audit_term_count_"] { width: 10%; }
+td[class^="audit_term_count_"] { text-align: center; }
+.nuclear-option { margin-top: 2em; }
+.button-nuclear {
+	background: #cf4944;
+	border: 1px solid #b43c38;
+	box-shadow: 0 1px 0 rgba( 204, 173, 173, 0.5 ) inset, 0 1px 0 rgba( 0, 0, 0, 0.15 );
+	color: #fff;
+	text-decoration: none;
+	border-radius: 3px;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 13px;
+	height: 28px;
+	line-height: 26px;
+	margin: 0;
+	padding: 0 10px 1px;
+	white-space: nowrap;
+}
+.button-nuclear:hover {
+	color: #EAE1E1;
+}
