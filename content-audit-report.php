@@ -318,6 +318,8 @@ function add_quickedit_content_owner( $column_name, $type ) {
 
 // Prints the content status, notes, and owner on the front end
 function content_audit_front_end_display( $content ) {
+	if ( !is_user_logged_in() )
+		return $content;
 	$role = wp_get_current_user()->roles[0];
 	$options = get_option( 'content_audit' );
 	$allowed = $options['rolenames'];
@@ -357,6 +359,8 @@ function content_audit_notes( $echo = true ) {
 
 // Prints the CSS for the front end
 function content_audit_front_end_css() {
+	if ( !is_user_logged_in() )
+		return;
 	$role = wp_get_current_user()->roles[0];
 	$options = get_option( 'content_audit' );
 	$allowed = $options['rolenames'];
