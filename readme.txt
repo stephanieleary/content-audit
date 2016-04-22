@@ -24,8 +24,6 @@ You can display the audit details to logged-in editors on the front end if you w
 
 = Translations =
 
-* Japanese (JA) by Naoko Takano
-
 If you would like to send me a translation, please write to me through <a href="http://sillybean.net/about/contact/">my contact page</a>. Let me know which plugin you've translated and how you would like to be credited. I will write you back so you can attach the files in your reply.
 
 == Notes ==
@@ -69,7 +67,6 @@ If you would like to send me a translation, please write to me through <a href="
 * Fix strings that couldn't be translated.
 * General cleanup.
 * Remove recommendation and column support for defunct Google Analytics Dashboard plugin.
-* Japanese translation by Naoko Takano.
 = 1.8.2 =
 * Fix bug where CSV export term column was cumulative instead of per-post.
 = 1.8.1 =
