@@ -239,6 +239,7 @@ function content_audit_owner_meta_box() {
 			'selected' => $owner, 
 			'name' => '_content_audit_owner', 
 			'show_option_none' => __( 'Select a user','content-audit' ),
+			'role__in' => $allowed,
 		 ) );	
 	}
 	else {
@@ -370,6 +371,8 @@ function save_content_audit_media_meta( $post, $attachment ) {
 }
 
 function content_audit_media_fields( $form_fields, $post ) {
+	$options = get_option( 'content_audit' );
+	$allowed = $options['rolenames'];
 	
 	$notes = esc_textarea( get_post_meta( $post->ID, '_content_audit_notes', true ) );
 	
@@ -384,6 +387,7 @@ function content_audit_media_fields( $form_fields, $post ) {
 		'name' => "attachments[$post->ID][_content_audit_owner]", 
 		'show_option_none' => __( 'Select a user', 'content-audit' ),
 		'echo' => 0,
+		'role__in' => $allowed,
 	 ) );
 	
 	$form_fields['audit_owner'] = array( 
@@ -549,6 +553,7 @@ function content_audit_quickedit( $column_name, $post_type ) {
 									'selected' => $owner, 
 									'name' => '_content_audit_owner', 
 									'show_option_none' => __( 'Select a user','content-audit' ),
+									'role__in' => $allowed,
 								 ) );	
 								?>
 							</label>

@@ -2,9 +2,9 @@
 Contributors: sillybean
 Tags: content, audit, review, inventory
 Donate Link: http://stephanieleary.com/code/wordpress/content-audit/
-Requires at least: 3.1
-Tested up to: 4.2
-Stable tag: 1.8.2
+Requires at least: 4.4
+Tested up to: 4.6.1
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,10 +61,12 @@ If you would like to send me a translation, please write to me through <a href="
 
 == Changelog ==
 
+= 1.9.1 =
+* Users dropdown is now limited to roles allowed to audit as per Settings screen.
 = 1.9 =
 * Filter ALL THE THINGS! See the Notes tab for filter reference.
-* Remove unnecessary globals.
-* Fix strings that couldn't be translated.
+* Remove unnecessary globals and deprecated get_currentuserinfo() function.
+* Localize and add text domain to forgotten strings.
 * General cleanup.
 * Remove recommendation and column support for defunct Google Analytics Dashboard plugin.
 = 1.8.2 =
