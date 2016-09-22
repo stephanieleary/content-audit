@@ -261,27 +261,25 @@ function content_audit_restrict_content_owners() {
 		$type = 'post';
 	
 	if ( in_array( $type, $options['post_types'] ) ) {
+		add_filter( 'wp_dropdown_users_args', 'content_audit_dropdown_users_args', 10, 2 );
 		wp_dropdown_users( 
 			array( 
 				'show_option_all' => __( 'Show all owners', 'content-audit' ),
 				'name' => 'content_owner',
 				'selected' => isset( $_GET['content_owner'] ) ? $_GET['content_owner'] : 0,
-				'role__in' => $allowed,
 			 )
 		 );
+		remove_filter( 'wp_dropdown_users_args', 'content_audit_dropdown_users_args' );
 	}
 }
 
 // print a dropdown to filter posts by author
 function content_audit_restrict_content_authors() {
-	$options = get_option( 'content_audit' );
-	$allowed = $options['rolenames'];
 	wp_dropdown_users( 
 		array( 
 			'show_option_all' => __( 'Show all authors', 'content-audit' ),
 			'name' => 'author',
-			'selected' => isset( $_GET['author'] ) ? $_GET['author'] : 0,
-			'role__in' => $allowed,
+			'selected' => isset( $_GET['author'] ) ? $_GET['author'] : 0
 		 )
 	 );
 }
@@ -298,22 +296,21 @@ function content_audit_posts_where( $where ) {
 // Outputs the new custom Quick Edit field HTML
 function add_quickedit_content_owner( $column_name, $type ) { 
 	$options = get_option( 'content_audit' );
-	$allowed = $options['rolenames'];
 	if ( $column_name == 'content_owner' ) { ?>
 	<fieldset class="inline-edit-col-right">
 	    <div class="inline-edit-col">
 		<label class="inline-edit-status alignleft">
 			<span class="title"><?php _e( "Content Owner", 'content-audit' ); ?></span>
 			<?php
-			
+			add_filter( 'wp_dropdown_users_args', 'content_audit_dropdown_users_args', 10, 2 );
 			wp_dropdown_users( 
 				array( 
 					'show_option_all' => __( 'None', 'content-audit' ),
 					'name' => '_content_audit_owner',
 					'selected' => get_post_meta( get_the_ID(), '_content_audit_owner', true ),
-					'role__in' => $allowed,
 				 )
 			 );			
+			remove_filter( 'wp_dropdown_users_args', 'content_audit_dropdown_users_args' );		
 			?>
 			</label>
 		</div>

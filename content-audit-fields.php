@@ -222,6 +222,12 @@ function content_audit_notes_meta_box() {
 <?php
 }
 
+function content_audit_dropdown_users_args( $query_args, $r ) {
+	$options = get_option( 'content_audit' );
+	$query_args['role__in'] = $options['rolenames'];
+	return $query_args;
+}
+
 function content_audit_owner_meta_box() {
 	$role = wp_get_current_user()->roles[0];
 	$options = get_option( 'content_audit' );
@@ -235,12 +241,13 @@ function content_audit_owner_meta_box() {
 	$owner = get_post_meta( get_the_ID(), '_content_audit_owner', true );
 	if ( empty( $owner ) ) $owner = -1;
 	if ( in_array( $role, $allowed ) ) {
+		add_filter( 'wp_dropdown_users_args', 'content_audit_dropdown_users_args', 10, 2 );
 		wp_dropdown_users( array( 
 			'selected' => $owner, 
 			'name' => '_content_audit_owner', 
 			'show_option_none' => __( 'Select a user','content-audit' ),
-			'role__in' => $allowed,
 		 ) );	
+		remove_filter( 'wp_dropdown_users_args', 'content_audit_dropdown_users_args' );
 	}
 	else {
 		// let non-auditors see the owner
@@ -371,8 +378,6 @@ function save_content_audit_media_meta( $post, $attachment ) {
 }
 
 function content_audit_media_fields( $form_fields, $post ) {
-	$options = get_option( 'content_audit' );
-	$allowed = $options['rolenames'];
 	
 	$notes = esc_textarea( get_post_meta( $post->ID, '_content_audit_notes', true ) );
 	
@@ -382,13 +387,14 @@ function content_audit_media_fields( $form_fields, $post ) {
 	$date = get_post_meta( $post->ID, '_content_audit_expiration_date', true );
 	$date = strtotime( $date );
 	
+	add_filter( 'wp_dropdown_users_args', 'content_audit_dropdown_users_args', 10, 2 );
 	$owner_dropdown = wp_dropdown_users( array( 
 		'selected' => $owner, 
 		'name' => "attachments[$post->ID][_content_audit_owner]", 
 		'show_option_none' => __( 'Select a user', 'content-audit' ),
 		'echo' => 0,
-		'role__in' => $allowed,
 	 ) );
+	remove_filter( 'wp_dropdown_users_args', 'content_audit_dropdown_users_args' );
 	
 	$form_fields['audit_owner'] = array( 
 			'label' => __( 'Content Audit Owner', 'content-audit' ),
@@ -549,12 +555,13 @@ function content_audit_quickedit( $column_name, $post_type ) {
 								<span class="title"><?php _e( 'Content Owner' ); ?></span>
 								<?php wp_nonce_field( 'content_audit_owner_nonce', '_content_audit_owner_nonce' ); ?>
 								<?php
+								add_filter( 'wp_dropdown_users_args', 'content_audit_dropdown_users_args', 10, 2 );
 								wp_dropdown_users( array( 
 									'selected' => $owner, 
 									'name' => '_content_audit_owner', 
 									'show_option_none' => __( 'Select a user','content-audit' ),
-									'role__in' => $allowed,
 								 ) );	
+								remove_filter( 'wp_dropdown_users_args', 'content_audit_dropdown_users_args' );	
 								?>
 							</label>
 						</div>
