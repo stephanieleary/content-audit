@@ -2,8 +2,8 @@
 Contributors: sillybean
 Tags: content, audit, review, inventory
 Donate Link: http://stephanieleary.com/code/wordpress/content-audit/
-Requires at least: 4.4
-Tested up to: 4.6.1
+Requires at least: 4.7
+Tested up to: 4.8.1
 Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -61,6 +61,11 @@ If you would like to send me a translation, please write to me through <a href="
 
 == Changelog ==
 
+= 2.0 =
+* Admin bar shows checkmarks for applied audit terms
+* Marking as audited from admin bar clears all other terms
+* New bulk actions to mark as audited or outdated
+* Refactor
 = 1.9.1 =
 * Users dropdown is now limited to roles allowed to audit as per Settings screen.
 = 1.9 =

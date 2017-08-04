@@ -3,7 +3,7 @@
 Plugin Name: Content Audit
 Plugin URI: http://stephanieleary.com/code/wordpress/content-audit/
 Description: Lets you create a content inventory and notify the responsible parties about their outdated content. 
-Version: 1.9.1
+Version: 2.0a
 Author: Stephanie Leary
 Author URI: http://stephanieleary.com
 
@@ -119,8 +119,14 @@ function content_audit_add_pages() {
 load_plugin_textdomain( 'content-audit', '', plugin_dir_path( __FILE__ ) . '/languages' );
 
 // load stuff
-include_once( dirname ( __FILE__ )."/content-audit-fields.php" );
-include_once( dirname ( __FILE__ )."/content-audit-options.php" );
-include_once( dirname ( __FILE__ )."/content-audit-report.php" );
-include_once( dirname ( __FILE__ )."/content-audit-schedule.php" );
-include_once( dirname ( __FILE__ )."/content-audit-overview.php" );
+include( 'inc/admin-bar.php' );
+include( 'inc/bulk-actions.php' );
+include( 'inc/bulk-quick-edit.php' );
+include( 'inc/custom-fields.php' );
+include( 'inc/cron.php' );
+include( 'inc/dashboard-overview.php' );
+include( 'inc/dashboard-widget.php' );
+include( 'inc/edit-list-columns-filters.php' );
+include( 'inc/front-end.php' );
+include( 'inc/options.php' );
+include( 'inc/taxonomy.php' );
