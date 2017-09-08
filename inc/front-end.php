@@ -29,11 +29,11 @@ add_filter( 'the_content', 'content_audit_front_end_display' );
 function content_audit_notes( $echo = true ) {
 	$post_id = get_the_ID();
 	$out = '<p class="content-status">'.get_the_term_list( $post_id, 'content_audit', __( 'Content status: ', 'content-audit' ), ', ','' ).'</p>';
-	$ownerID = get_post_meta( $post_id, "_content_audit_owner", true );
+	$ownerID = absint( get_post_meta( $post_id, "_content_audit_owner", true ) );
 	if ( !empty( $ownerID ) ) {
 		$out .= '<p class="content-owner">'.__( "Assigned to: ", 'content-audit' ).get_the_author_meta( 'display_name', $ownerID ).'</p>';
 	}
-	$out .= '<p class="content-notes">'.get_post_meta( $post_id, "_content_audit_notes", true ).'</p>';
+	$out .= '<p class="content-notes">'.sanitize_text_field( get_post_meta( $post_id, "_content_audit_notes", true ) ).'</p>';
 	$out = apply_filters( 'content_audit_notes', '<div class="content-audit">'.$out.'</div>' );
 	if ( $echo ) 
 		echo $out;

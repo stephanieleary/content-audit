@@ -160,7 +160,7 @@ function content_audit_custom_column( $column_name, $id ) {
 		break;
 		
 		case 'content_owner': 
-			$ownerID = get_post_meta( $id, "_content_audit_owner", true );
+			$ownerID = absint( get_post_meta( $id, "_content_audit_owner", true ) );
 			if ( !empty( $ownerID ) && $ownerID > 0 ) {
 				$url = 'edit.php?'.$type.'content_owner='.$ownerID;
 				echo '<a id="_content_audit_owner-'.$id.'" title="'.$ownerID.'" href="'.admin_url( $url ).'">'.get_the_author_meta( 'display_name', $ownerID ).'</a>';
@@ -181,11 +181,11 @@ function content_audit_custom_column( $column_name, $id ) {
 		break;
 		
 		case 'content_notes': 
-			echo '<p id="_content_audit_notes-'.$id.'">'.get_post_meta( $id, "_content_audit_notes", true ).'</p>';
+			echo '<p id="_content_audit_notes-'.$id.'">'.sanitize_text_field( get_post_meta( $id, "_content_audit_notes", true ) ).'</p>';
 		break;
 		
 		case 'expiration':
-			$date = get_post_meta( $id, '_content_audit_expiration_date', true );
+			$date = sanitize_text_field( get_post_meta( $id, '_content_audit_expiration_date', true ) );
 			$datecontent = $datetitle = '';
 			// convert from timestamp to date string
 			if ( !empty( $date ) ) {
@@ -287,7 +287,8 @@ function content_audit_restrict_content_authors() {
 // amend the db query based on content owner dropdown selection
 function content_audit_posts_where( $where ) {
 	global $wpdb;
-	if ( isset( $_GET['content_owner'] ) && !empty( $_GET['content_owner'] ) ) { 
+	$owner = absint( $_REQUEST['content_owner'] );
+	if ( isset( $owner ) && !empty( $owner ) ) {
 		$where .= " AND ID IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='_content_audit_owner' AND meta_value='{$_GET['content_owner']}' )";
 	}	
 	return $where;

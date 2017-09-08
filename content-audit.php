@@ -30,31 +30,24 @@ TODO:
 * when this is fixed: http://core.trac.wordpress.org/ticket/16392
 */
 
+// load stuff
+include( 'inc/admin-bar.php' );
+include( 'inc/bulk-actions.php' );
+include( 'inc/bulk-quick-edit.php' );
+include( 'inc/custom-fields.php' );
+include( 'inc/cron.php' );
+include( 'inc/dashboard-overview.php' );
+include( 'inc/dashboard-widget.php' );
+include( 'inc/edit-list-columns-filters.php' );
+include( 'inc/front-end.php' );
+include( 'inc/options.php' );
+include( 'inc/taxonomy.php' );
+
 // when activated, add option and create taxonomy terms
 register_activation_hook( __FILE__, 'activate_content_audit_tax' );
 register_activation_hook( __FILE__, 'content_audit_activation' );
 function content_audit_activation() {
 	add_option( 'content_audit', content_audit_default_options(), '', 'yes' );
-}
-
-function content_audit_default_options() {
-	
-	// set defaults
-	$options = array();	
-	$options['post_types'] = array( 'page' );
-	$options['rolenames'] = array( 'administrator','editor' );
-	$options['display_switch'] = '0';
-	$options['display'] = '0';
-	$options['css'] = 'div.content-audit { background: #ffc; }
-p.content-notes { font-style: italic; }';
-	$options['mark_outdated'] = 0;
-	$options['outdate'] = 1;
-	$options['outdate_unit'] = 'years';
-	$options['notify'] = 0;
-	$options['notify_now'] = 0;	
-	$options['notify_authors'] = 0;	
-	$options['interval'] = 'monthly';
-	return $options;
 }
 
 // register options
@@ -117,16 +110,3 @@ function content_audit_add_pages() {
 
 // i18n
 load_plugin_textdomain( 'content-audit', '', plugin_dir_path( __FILE__ ) . '/languages' );
-
-// load stuff
-include( 'inc/admin-bar.php' );
-include( 'inc/bulk-actions.php' );
-include( 'inc/bulk-quick-edit.php' );
-include( 'inc/custom-fields.php' );
-include( 'inc/cron.php' );
-include( 'inc/dashboard-overview.php' );
-include( 'inc/dashboard-widget.php' );
-include( 'inc/edit-list-columns-filters.php' );
-include( 'inc/front-end.php' );
-include( 'inc/options.php' );
-include( 'inc/taxonomy.php' );

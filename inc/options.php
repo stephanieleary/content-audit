@@ -1,4 +1,26 @@
 <?php
+
+function content_audit_default_options() {
+	
+	// set defaults
+	$options = array();	
+	$options['post_types'] = array( 'page' );
+	$options['rolenames'] = array( 'administrator','editor' );
+	$options['display_switch'] = '0';
+	$options['display'] = '0';
+	$options['css'] = 'div.content-audit { background: #ffc; }
+p.content-notes { font-style: italic; }';
+	$options['mark_outdated'] = 0;
+	$options['outdate'] = 1;
+	$options['outdate_unit'] = 'years';
+	$options['notify'] = 0;
+	$options['notify_now'] = 0;	
+	$options['notify_authors'] = 0;	
+	$options['interval'] = 'monthly';
+	return $options;
+}
+
+
 function content_audit_sanitize_options( $input ) {
 	
 	$options = array();

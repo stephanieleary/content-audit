@@ -47,7 +47,7 @@ function content_audit_notes_meta_box() {
 	$allowed = $options['rolenames'];
 	if ( !is_array( $allowed ) )
 		$allowed = array( $allowed );
-	$notes = get_post_meta( get_the_ID(), '_content_audit_notes', true );
+	$notes = sanitize_text_field( get_post_meta( get_the_ID(), '_content_audit_notes', true ) );
 	if ( function_exists( 'wp_nonce_field' ) ) wp_nonce_field( 'content_audit_notes_nonce', '_content_audit_notes_nonce' ); 
 ?>
 <div id="audit-notes">
@@ -78,7 +78,7 @@ function content_audit_owner_meta_box() {
 <div id="audit-owner">
 	<?php
 	$options = get_option( 'content_audit' );
-	$owner = get_post_meta( get_the_ID(), '_content_audit_owner', true );
+	$owner = absint( get_post_meta( get_the_ID(), '_content_audit_owner', true ) );
 	if ( empty( $owner ) ) $owner = -1;
 	if ( in_array( $role, $allowed ) ) {
 		//add_filter( 'wp_dropdown_users_args', 'content_audit_dropdown_users_args', 10, 2 );
@@ -109,7 +109,7 @@ function content_audit_exp_date_meta_box() {
 ?>
 <div id="audit-exp-date">
 	<?php 
-	$date = get_post_meta( get_the_ID(), '_content_audit_expiration_date', true ); 
+	$date = sanitize_text_field( get_post_meta( get_the_ID(), '_content_audit_expiration_date', true ) ); 
 	// convert from timestamp to date string
 	if ( !empty( $date ) )
 		$date = date( 'm/d/y', $date );
@@ -174,12 +174,12 @@ function save_content_audit_meta_data( $post_id ) {
 	// for revisions, save using parent ID
 	if ( wp_is_post_revision( $post_id ) ) $post_id = wp_is_post_revision( $post_id ); 
 	
-	if ( empty( $_POST['_content_audit_owner'] ) ) {
+	if ( empty( $_POST['_content_audit_owner'] ) || $_POST['_content_audit_owner'] == '-1' ) {
 		$storedfield = get_post_meta( $post_id, '_content_audit_owner', true );
 		delete_post_meta( $post_id, '_content_audit_owner', $storedfield );
 	}
-	elseif ( $_POST['_content_audit_owner'] >= 0 ) // don't save -1 
-		update_post_meta( $post_id, '_content_audit_owner', $_POST['_content_audit_owner'] );
+	if ( $_POST['_content_audit_owner'] >= 0 ) // don't save -1 
+		update_post_meta( $post_id, '_content_audit_owner', absint( $_POST['_content_audit_owner'] ) );
 	
 	if ( empty( $_POST['_content_audit_expiration_date'] ) ) {
 		$storedfield = get_post_meta( $post_id, '_content_audit_expiration_date', true );
@@ -196,20 +196,24 @@ function save_content_audit_meta_data( $post_id ) {
 		delete_post_meta( $post_id, '_content_audit_notes', $storedfield );
 	}
 	else 
-		update_post_meta( $post_id, '_content_audit_notes', $_POST['_content_audit_notes'] );
+		update_post_meta( $post_id, '_content_audit_notes', sanitize_text_field( $_POST['_content_audit_notes'] ) );
 	
 }
 
 function save_content_audit_media_meta( $post, $attachment ) {
 	// in this filter, $post is an array of things being saved, not the usual $post object
 		
-	if ( isset( $attachment['_content_audit_owner'] ) ) 
-		update_post_meta( $post['ID'], '_content_audit_owner', $attachment['_content_audit_owner'] );
+	if ( isset( $attachment['_content_audit_owner'] ) && $attachment['_content_audit_owner'] > 0 ) 
+		update_post_meta( $post['ID'], '_content_audit_owner', absint( $attachment['_content_audit_owner'] ) );
+	else
+		delete_post_meta( $post_id, '_content_audit_owner' );
 	
 	if ( isset( $attachment['audit_notes'] ) ) 
-		update_post_meta( $post['ID'], '_content_audit_notes', $attachment['audit_notes'] );
+		update_post_meta( $post['ID'], '_content_audit_notes', sanitize_text_field( $attachment['audit_notes'] ) );
 	
-	if ( isset( $attachment['_content_audit_expiration_date'] ) ) {
+	if ( empty( $attachment['_content_audit_expiration_date'] ) )
+		delete_post_meta( $post_id, '_content_audit_expiration_date' );
+	elseif ( isset( $attachment['_content_audit_expiration_date'] ) ) {
 		// convert displayed date string to timestamp for storage
 		$date = strtotime( $attachment['_content_audit_expiration_date'] );
 		update_post_meta( $post['ID'], '_content_audit_expiration_date', $date );
@@ -217,6 +221,7 @@ function save_content_audit_media_meta( $post, $attachment ) {
 		
 	return $post;
 }
+
 
 function content_audit_media_fields( $form_fields, $post ) {
 

@@ -104,7 +104,7 @@ function content_audit_ajax_categorize() {
 	}
 
 	$term = stripslashes( $_GET['term'] );
-	$id = $_GET['post_id'];
+	$id = (int)$_GET['post_id'];
 	$append = true;
 	
 	if ( $term == 'audited' )

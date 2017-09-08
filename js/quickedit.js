@@ -48,11 +48,11 @@
 	   // get the selected post ids that are being edited
 	   var $post_ids = new Array();
 	   $bulk_row.find( '#bulk-titles' ).children().each( function() {
-	      $post_ids.push( $( this ).attr( 'id' ).replace( /^( title )/i, '' ) );
-	   } );
+			$post_ids.push( $( this ).attr( 'id' ).replace( /^(ttle)/i, '' ) );
+		});
 
 	  	// get the owner
-	  	var $content_owner = $bulk_row.find( 'input[name="_content_audit_owner"]' ).val();
+	  	var $content_owner = $bulk_row.find( 'select[name="_content_audit_owner"]' ).val();
 	  	// get the expiration date
 		var $content_expiration = $bulk_row.find( 'input[name="_content_audit_expiration_date"]' ).val();
 		// get the notes
@@ -68,8 +68,9 @@
 	         action: 'content_audit_save_bulk_edit', // this is the name of our WP AJAX function that we'll set up next
 	         post_ids: $post_ids, // and these are the parameters we're passing to our function
 		 	 _content_audit_owner: $content_owner,
-			_content_audit_expiration_date: $content_expiration,
-			_content_audit_notes: $content_notes,
+			 _content_audit_expiration_date: $content_expiration,
+			 _content_audit_notes: $content_notes,
+			 security: $( '#content-audit-bulk-nonce' ).val()
 	      }
 	   } );
 
