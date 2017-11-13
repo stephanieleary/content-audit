@@ -287,9 +287,11 @@ function content_audit_restrict_content_authors() {
 // amend the db query based on content owner dropdown selection
 function content_audit_posts_where( $where ) {
 	global $wpdb;
-	$owner = absint( $_REQUEST['content_owner'] );
-	if ( isset( $owner ) && !empty( $owner ) ) {
-		$where .= " AND ID IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='_content_audit_owner' AND meta_value='{$_GET['content_owner']}' )";
-	}	
+	if ( isset( $_REQUEST['content_owner'] ) ) {
+		$owner = absint( $_REQUEST['content_owner'] );
+		if ( isset( $owner ) && !empty( $owner ) ) { 
+			$where .= " AND ID IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='_content_audit_owner' AND meta_value='{$_GET['content_owner']}' )";
+		}
+	}
 	return $where;
 }
