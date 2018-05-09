@@ -11,7 +11,7 @@
 @supports ( display:grid ) {
 	#boss-squares {
 		display: grid;
-		grid-template-columns: repeat( auto-fit, minmax(9em, auto));
+		grid-template-columns: repeat( auto-fit, minmax(9em, auto) );
 		grid-gap: 1em;
 	}
 	#boss-squares li {
