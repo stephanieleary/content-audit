@@ -4,10 +4,24 @@
 #audit-notes textarea { width: 99%; margin: 0 1em 1em 0; }
 #content_audit_form textarea { display: block; width: 30em; height: 10em; }
 #boss-squares { margin: 2em 0; overflow: auto; }
-#boss-squares li { float: left; height: 8em; padding: .5em 0; text-align: center; background: #f9f9f9; border: 1px solid #dfdfdf; border-radius: 3px; }
-#boss-squares li a { display: block; text-decoration: none; }
+#boss-squares li { float: left; height: 8em; text-align: center; background: #f9f9f9; border: 1px solid #dfdfdf; border-radius: 3px; }
+#boss-squares li a { display: block; text-decoration: none; padding: .5em;}
 #boss-squares li h3 { font-size: 2em; margin-top: 0; padding-top: 1em; }
 #boss-squares li p { margin-bottom: 0; padding-bottom: 1em; }
+@supports ( display:grid ) {
+	#boss-squares {
+		display: grid;
+		grid-template-columns: repeat( auto-fit, minmax(9em, auto));
+		grid-gap: 1em;
+	}
+	#boss-squares li {
+		/*  override inline styles  */
+		width: auto !important;
+		margin: 0 !important;
+		/* reset other styles */
+		height: auto;
+	}
+}
 #posts-filter th#ID { width: 4em; }
 #posts-filter th#expiration { width: 6em; }
 table.boss-view { margin-bottom: 2em; }
