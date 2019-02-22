@@ -25,6 +25,7 @@ function create_content_audit_tax() {
 			'show_tagcloud' => false,
 			'update_count_callback' => 'content_audit_term_count',
 			'helps' => __('Enter content attributes separated by commas.', 'content-audit'),
+			'show_in_rest' => true,
 		 )
 	 );
 }
