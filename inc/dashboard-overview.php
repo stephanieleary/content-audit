@@ -137,7 +137,7 @@ function content_audit_download_template_include( $template ) {
 	global $wpdb;
 
 	$tableheaders = array( 
-		__( 'ID', 'content-audit' ), 
+		__( 'Post ID', 'content-audit' ), 
 		__( 'Title', 'content-audit' ), 
 		__( 'Author', 'content-audit' ), 
 		__( 'Content Owner', 'content-audit' ), 
