@@ -28,7 +28,7 @@ function content_audit_overview() { ?>
 	?>
 
     <h2><?php _e( 'Content Audit Overview', 'content-audit' ); ?></h2>
-	<p><a class="button secondary" href="<?php echo add_query_arg( array( 'format' => 'csv' ), home_url() ); ?>"><?php __('Download as CSV', 'content-audit'); ?></a></p>
+	<p><a class="button secondary" href="<?php echo add_query_arg( array( 'format' => 'csv' ), home_url() ); ?>"><?php esc_html_e('Download as CSV', 'content-audit'); ?></a></p>
 	<?php
 	// for each term in the audit taxonomy, print a box with a big number for the count
 	$terms = get_terms( 'content_audit', array( 'hide_empty' => 0 ) );
