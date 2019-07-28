@@ -28,7 +28,7 @@ function content_audit_overview() { ?>
 	?>
 
     <h2><?php _e( 'Content Audit Overview', 'content-audit' ); ?></h2>
-	<p><a class="button secondary" href="<?php echo add_query_arg( array( 'format' => 'csv' ), home_url() ); ?>"><?php __('Download as CSV', 'content-audit'); ?></a></p>
+	<p><a class="button secondary" href="<?php echo add_query_arg( array( 'format' => 'csv' ), home_url() ); ?>"><?php esc_html_e('Download as CSV', 'content-audit'); ?></a></p>
 	<?php
 	// for each term in the audit taxonomy, print a box with a big number for the count
 	$terms = get_terms( 'content_audit', array( 'hide_empty' => 0 ) );
@@ -137,7 +137,7 @@ function content_audit_download_template_include( $template ) {
 	global $wpdb;
 
 	$tableheaders = array( 
-		__( 'ID', 'content-audit' ), 
+		__( 'Post ID', 'content-audit' ), 
 		__( 'Title', 'content-audit' ), 
 		__( 'Author', 'content-audit' ), 
 		__( 'Content Owner', 'content-audit' ), 
@@ -146,7 +146,8 @@ function content_audit_download_template_include( $template ) {
 		__( 'Type', 'content-audit' ), 
 		__( 'Created', 'content-audit' ), 
 		__( 'Updated', 'content-audit' ), 
-		__( 'Expires', 'content-audit' ) 
+		__( 'Expires', 'content-audit' ),
+		__( 'Link', 'content-audit' )
 	);
 	$date_format = get_option( 'date_format' );
 	$options = get_option( 'content_audit' ); 
@@ -203,6 +204,7 @@ function content_audit_download_template_include( $template ) {
 			get_the_date( $date_format ) ,
 			the_modified_date( $date_format, '', '', false ) ,
 			$expiration,
+			get_permalink( $post->ID )
 		);
 		fputcsv( $file, apply_filters( 'content_audit_csv_row_data', $row ) );
 	}

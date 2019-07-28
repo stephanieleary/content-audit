@@ -3,8 +3,8 @@ Contributors: sillybean
 Tags: content, audit, review, inventory
 Donate Link: http://stephanieleary.com/code/wordpress/content-audit/
 Requires at least: 4.7
-Tested up to: 4.8.1
-Stable tag: 1.9.2
+Tested up to: 5.2.2
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,14 @@ If you would like to send me a translation, please write to me through <a href="
 * Marking as audited from admin bar clears all other terms
 * New bulk actions to mark as audited or outdated
 * Refactor
+* Issues from GitHub, props mrwweb:
+** set show_in_rest to true for the content_audit taxonomy
+** fix content_audit_cron_schedules function to add cron jobs, not overwrite
+** Add "Link" column to end of CSV export with post permalink
+** change exported CSV table header "ID" to "Post ID"
+** Fix custom status layout issues with CSS Grid on Content Audit Overview page
+** escape and echo "Download CSV" button label
+** Quashed notice when the request does not contain a content_owner key
 = 1.9.2 =
 * Fixed XSS issue reported by https://security.dxw.com
 = 1.9.1 =

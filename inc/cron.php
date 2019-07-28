@@ -5,16 +5,20 @@ register_activation_hook( dirname ( __FILE__ )."/content-audit.php", 'content_au
 register_deactivation_hook( dirname ( __FILE__ )."/content-audit.php", 'content_audit_cron_deactivate' );
 
 // add custom time to cron
-function content_audit_cron_schedules( $param ) {
-	return array( 'weekly' => array( 
-								'interval' => 60*60*24*7, 
-								'display'  => __( 'Once a Week', 'content-audit' )
-							 ) ,
-				  'monthly' => array( 
-								'interval' => 60*60*24*7*4, 
-								'display'  => __( 'Once a Month', 'content-audit' )
-							 ) 
-				 );
+function content_audit_cron_schedules( $schedules ) {
+	if ( !isset( $schedules['weekly'] ) ) {
+		$schedules['weekly'] = array( 
+									'interval' => 60*60*24*7, 
+									'display'  => __( 'Once a Week', 'content-audit' )
+								 );
+	}
+	if ( !isset( $schedules['monthly'] ) ) {
+		$schedules['monthly'] = array( 
+									'interval' => 60*60*24*7*4, 
+									'display'  => __( 'Once a Month', 'content-audit' )
+								 );
+	}
+	return $schedules;
 }
 add_filter( 'cron_schedules', 'content_audit_cron_schedules' );
 
