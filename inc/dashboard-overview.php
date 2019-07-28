@@ -146,7 +146,8 @@ function content_audit_download_template_include( $template ) {
 		__( 'Type', 'content-audit' ), 
 		__( 'Created', 'content-audit' ), 
 		__( 'Updated', 'content-audit' ), 
-		__( 'Expires', 'content-audit' ) 
+		__( 'Expires', 'content-audit' ),
+		__( 'Link', 'content-audit' ) 
 	);
 	$date_format = get_option( 'date_format' );
 	$options = get_option( 'content_audit' ); 
@@ -203,6 +204,7 @@ function content_audit_download_template_include( $template ) {
 			get_the_date( $date_format ) ,
 			the_modified_date( $date_format, '', '', false ) ,
 			$expiration,
+			get_permalink( $post->ID )
 		);
 		fputcsv( $file, apply_filters( 'content_audit_csv_row_data', $row ) );
 	}
