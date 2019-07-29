@@ -147,7 +147,7 @@ function content_audit_download_template_include( $template ) {
 		__( 'Created', 'content-audit' ), 
 		__( 'Updated', 'content-audit' ), 
 		__( 'Expires', 'content-audit' ),
-		__( 'Link', 'content-audit' )
+		__( 'Link', 'content-audit' ) 
 	);
 	$date_format = get_option( 'date_format' );
 	$options = get_option( 'content_audit' ); 
