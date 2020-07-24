@@ -16,27 +16,28 @@ function content_audit_admin_bar_links() {
 	$wp_admin_bar->add_menu( array( 
 		'parent' => false, 
 		'id' => 'content_audit',
-		'title' => __( 'Audit', 'content-audit' ), 
-		'href' => get_edit_post_link( $post->ID ), 
-		'meta' => false 
+		'title'  => __('Audit', 'content-audit'),
+        'meta' => false 
 	 ) );
 
 	$auditterms = get_terms( 'content_audit', array( 'hide_empty' => false ) );
 	if ( !empty( $auditterms ) )
-		foreach ( $auditterms as $term ) {
-			$url = add_query_arg( array( 'action' => 'content-audit-categorize',
-										'term' => $term->slug,
-										'post_id' => $post->ID,
-										'return' => $_SERVER["REQUEST_URI"],
-										'nonce' => $nonce,
-									 ), admin_url( '/admin-ajax.php' ) );
-									
-			$title = $term->name;
-			if ( has_term( $term->term_id, 'content_audit', $post->ID ) ) {
-				$title = '&checkmark; ' . $title;
-			}
-			
-			$wp_admin_bar->add_menu( array( 
+		foreach ($auditterms as $term) {
+            $title   = $term->name;
+            $checked = has_term($term->term_id, 'content_audit', $post->ID);
+            if ($checked) {
+                $title = '&checkmark; ' . $title;
+            };
+            $url = add_query_arg(
+                array('action'  => 'content-audit-categorize',
+                    'checked' => $checked,
+                    'term'    => $term->slug,
+                    'post_id' => $post->ID,
+                    'return'  => $_SERVER["REQUEST_URI"],
+                    'nonce'   => $nonce,
+                ), admin_url('/admin-ajax.php'));
+
+            $wp_admin_bar->add_menu( array( 
 				'parent' => 'content_audit',
 				'id' => 'content_audit_' . $term->slug,
 				'title' => $title,
@@ -110,9 +111,14 @@ function content_audit_ajax_categorize() {
 	if ( $term == 'audited' )
 		$append = false;
 
-	$set = wp_set_object_terms( $id, $term, $tax->name, $append );
-	
-	if ( is_wp_error( $set ) )
+    if (isset($_GET['checked'])) {
+        $set = wp_remove_object_terms($id, $term, $tax->name);
+    }
+    else {
+        $set = wp_set_object_terms($id, $term, $tax->name, $append);
+    }
+
+    if ( is_wp_error( $set ) )
 	   echo $set->get_error_message();
 
 	wp_redirect( esc_url( $_GET['return'] ) );
