@@ -25,9 +25,6 @@ function content_audit_admin_bar_links() {
 		foreach ($auditterms as $term) {
             $title   = $term->name;
             $checked = has_term($term->term_id, 'content_audit', $post->ID);
-            if ($checked) {
-                $title = '&checkmark; ' . $title;
-            };
             $url = add_query_arg(
                 array('action'  => 'content-audit-categorize',
                     'checked' => $checked,
@@ -36,6 +33,10 @@ function content_audit_admin_bar_links() {
                     'return'  => $_SERVER["REQUEST_URI"],
                     'nonce'   => $nonce,
                 ), admin_url('/admin-ajax.php'));
+
+            if ($checked) {
+                $title = '&checkmark; ' . $title;
+            };
 
             $wp_admin_bar->add_menu( array( 
 				'parent' => 'content_audit',
